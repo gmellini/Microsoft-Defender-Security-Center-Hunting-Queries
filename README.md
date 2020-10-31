@@ -48,7 +48,7 @@ TODO: I see some False Positive, try to improve the search (parent process is ``
 ```
 DeviceProcessEvents
 | where FileName == "powershell.exe"
-| where ProcessCommandLinecontains "-encodedcommand"
+| where ProcessCommandLine contains "-encodedcommand"
 ```
 
 ```
