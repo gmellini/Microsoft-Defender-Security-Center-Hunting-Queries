@@ -26,6 +26,9 @@ DeviceProcessEvents
 ```
 DeviceProcessEvents
 | where FileName == "net.exe"
+// exclude local PC groups enumeration from the results, can generate FP
+// you can have hits for local groups when Defender ATP collects the investigation package
+| where ProcessCommandLine !contains "localgroup"
 | where ProcessCommandLine contains "group"
 ```
 
