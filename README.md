@@ -92,3 +92,11 @@ DeviceProcessEvents
 // exclude FP
 | where ProcessCommandLine !contains "vmware-view-usbd"
 ```
+
+### Step 13: Grant net share full access to all for Ryuk ransomware
+```
+DeviceProcessEvents
+| where FileName == "net.exe"
+| where ProcessCommandLine has "share" and ProcessCommandLine contains "GRANT"
+```
+Check for a GRANT; on the post Vitali shows a FULL access to Everyone ```net share aaa$=C:\aaa /GRANT:Everyone,FULL```
