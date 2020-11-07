@@ -3,9 +3,8 @@ This repo contains some personal [queries](https://docs.microsoft.com/en-us/wind
 
 Hope can be useful. If you find any FP or you want suggest some modification please send a PR
 
-## Ryuk ransomware
-Following rules map the detection opportunities highlighted in Red Canary blog post [A Bazar start: How one hospital thwarted a Ryuk ransomware outbreak](https://redcanary.com/blog/how-one-hospital-thwarted-a-ryuk-ransomware-outbreak/). 
-I suggest to read the blog post and then try the queries on your Security Center to identify FP or anomalies to be investigated
+## Red Canary - detection of Ryuk ransomware
+Detection opportunities highlighted in Red Canary blog post [A Bazar start: How one hospital thwarted a Ryuk ransomware outbreak](https://redcanary.com/blog/how-one-hospital-thwarted-a-ryuk-ransomware-outbreak/)
 
 ### Detection Opportunity 1: Process hollowing of cmd.exe
 ```
@@ -37,7 +36,7 @@ DeviceProcessEvents
 DeviceProcessEvents
 | where FileName == "svchost.exe"
 | where InitiatingProcessFileName !in ("services.exe", "MsMpEng.exe")
-// exclude frome search parent process svchost.exe with -k option
+// exclude from the search parent process svchost.exe with -k option
 | where not(InitiatingProcessFileName == "svchost.exe" and InitiatingProcessCommandLine contains "-k")
 ```
 TODO: I see some False Positive, try to improve the search
@@ -46,7 +45,7 @@ TODO: I see some False Positive, try to improve the search
 DeviceProcessEvents
 | where FileName == "svchost.exe"
 | where ProcessCommandLine matches regex "^$"
-// exclude frome search parent process svchost.exe with -k option
+// exclude from the search parent process svchost.exe with -k option
 | where not(InitiatingProcessFileName == "svchost.exe" and InitiatingProcessCommandLine contains "-k")
 ```
 
@@ -79,4 +78,17 @@ Check Detection Opportunity 3
 ```
 DeviceProcessEvents
 | where FileName == "adfind.exe"
+```
+
+## Vitali Kremez - detection of Ryuk ransomware
+Detection steps highlighted in Vitali Kremez blog post [Anatomy of Attack: Inside BazarBackdoor to Ryuk Ransomware "one" Group via Cobalt Strike](https://www.advanced-intel.com/post/anatomy-of-attack-inside-bazarbackdoor-to-ryuk-ransomware-one-group-via-cobalt-strike)
+
+### Step 4: Review the network of the host via "net view"
+```
+DeviceProcessEvents
+| where Timestamp > ago(1h)
+| where FileName == "net.exe"
+| where ProcessCommandLine contains "view"
+// exclude FP
+| where ProcessCommandLine !contains "vmware-view-usbd"
 ```
