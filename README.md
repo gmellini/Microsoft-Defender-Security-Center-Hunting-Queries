@@ -27,7 +27,7 @@ DeviceProcessEvents
 DeviceProcessEvents
 | where FileName == "net.exe"
 // exclude local PC groups enumeration from the results, can generate FP
-// you can have hits for local groups when Defender ATP collects the investigation package
+// e.g. you have hits for local groups when Defender ATP collects the investigation package
 | where ProcessCommandLine !contains "localgroup"
 | where ProcessCommandLine contains "group"
 ```
@@ -37,6 +37,8 @@ DeviceProcessEvents
 DeviceProcessEvents
 | where FileName == "svchost.exe"
 | where InitiatingProcessFileName !in ("services.exe", "MsMpEng.exe")
+// exclude frome search parent process svchost.exe with -k option
+| where not(InitiatingProcessFileName == "svchost.exe" and InitiatingProcessCommandLine contains "-k")
 ```
 TODO: I see some False Positive, try to improve the search
 
@@ -44,8 +46,9 @@ TODO: I see some False Positive, try to improve the search
 DeviceProcessEvents
 | where FileName == "svchost.exe"
 | where ProcessCommandLine matches regex "^$"
+// exclude frome search parent process svchost.exe with -k option
+| where not(InitiatingProcessFileName == "svchost.exe" and InitiatingProcessCommandLine contains "-k")
 ```
-TODO: I see some False Positive, try to improve the search (parent process is ```svchost -k```)
 
 ### Detection Opportunity 5: Attempted lateral movement via WMI + PowerShell + Cobalt Strike
 ```
