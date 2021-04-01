@@ -100,3 +100,22 @@ DeviceProcessEvents
 | where ProcessCommandLine has "share" and ProcessCommandLine contains "GRANT"
 ```
 Check for a GRANT; on the post Vitali shows a FULL access to Everyone ```net share aaa$=C:\aaa /GRANT:Everyone,FULL```
+
+# FireEye - Back in a Bit: Attacker Use of the Windows Background Intelligent Transfer Service
+Detection of bitsadmin.exe usage to download malware and create persistence as shown in FireEye post [Back in a Bit: Attacker Use of the Windows Background Intelligent Transfer Service](https://www.fireeye.com/blog/threat-research/2021/03/attacker-use-of-windows-background-intelligent-transfer-service.html)
+
+### bitsadmin download activity
+```
+DeviceProcessEvents
+| where ProcessVersionInfoOriginalFileName == "bitsadmin.exe"
+| where ProcessCommandLine contains_cs "download"
+```
+Check using bitsadmin to create a job that downloads an executable (malware) and stores it somewhere
+
+### bitsadmin create a persistent job activity
+```
+DeviceProcessEvents
+| where ProcessVersionInfoOriginalFileName == "bitsadmin.exe"
+| where ProcessCommandLine contains_cs "persistence"
+```
+Check using bitsadmin to create a job to gain persistence
