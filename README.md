@@ -108,7 +108,7 @@ Detection of bitsadmin.exe usage to download malware and create persistence as s
 ```
 DeviceProcessEvents
 | where ProcessVersionInfoOriginalFileName == "bitsadmin.exe"
-| where ProcessCommandLine contains_cs "/addfile"
+| where ProcessCommandLine contains "/addfile"
 ```
 Check using bitsadmin to create a job that downloads an executable (malware) and stores it somewhere
 
@@ -116,6 +116,6 @@ Check using bitsadmin to create a job that downloads an executable (malware) and
 ```
 DeviceProcessEvents
 | where ProcessVersionInfoOriginalFileName == "bitsadmin.exe"
-| where ProcessCommandLine contains_cs "/SetNotifyCmdLine"
+| where ProcessCommandLine contains "/SetNotifyCmdLine"
 ```
 Check using bitsadmin to create a job to gain persistence
