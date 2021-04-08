@@ -3,6 +3,17 @@ This repo contains some personal [queries](https://docs.microsoft.com/en-us/wind
 
 Hope can be useful. If you find any FP or you want suggest some modification please send a PR
 
+## LOLBAS
+Detection queries based on [Living Off The Land Binaries and Scripts (LOLBAS)](https://lolbas-project.github.io/) criteria
+
+### Certutil.exe
+[Certutil.exe](https://lolbas-project.github.io/lolbas/Binaries/Certutil/) is a Windows binary used for handeling certificates; the query detects download and encode/decode operations
+```
+DeviceProcessEvents
+| where ProcessVersionInfoOriginalFileName == "CertUtil.exe"
+| where ProcessCommandLine contains "://" or ProcessCommandLine contains "-encode" or ProcessCommandLine contains "-decode"
+```
+
 ## Red Canary - detection of Ryuk ransomware
 Detection opportunities highlighted in Red Canary blog post [A Bazar start: How one hospital thwarted a Ryuk ransomware outbreak](https://redcanary.com/blog/how-one-hospital-thwarted-a-ryuk-ransomware-outbreak/)
 
