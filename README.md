@@ -86,7 +86,6 @@ Detection steps highlighted in Vitali Kremez blog post [Anatomy of Attack: Insid
 ### Step 4: Review the network of the host via "net view"
 ```
 DeviceProcessEvents
-| where Timestamp > ago(1h)
 | where FileName == "net.exe"
 | where ProcessCommandLine contains "view"
 // exclude FP
